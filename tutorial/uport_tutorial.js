@@ -10,10 +10,10 @@ const web3 = connect.getWeb3()
 
 // Setup the simple Status contract - allows you to set and read a status string
 
-const abi = [{"constant":false,"inputs":[{"name":"status","type":"string"}],"name":"updateStatus","outputs":[],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"addr","type":"address"}],"name":"getStatus","outputs":[{"name":"","type":"string"}],"payable":false,"type":"function"}]
+const abi = [{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"_spender","type":"address"},{"name":"_value","type":"uint256"}],"name":"approve","outputs":[{"name":"success","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"totalSupply","type":"uint256"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transferFrom","outputs":[{"name":"success","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"_owner","type":"address"}],"name":"balanceOf","outputs":[{"name":"balance","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"owner","outputs":[{"name":"","type":"address"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transfer","outputs":[{"name":"success","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"_owner","type":"address"},{"name":"_spender","type":"address"}],"name":"allowance","outputs":[{"name":"remaining","type":"uint256"}],"payable":false,"type":"function"},{"inputs":[],"payable":false,"type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"_from","type":"address"},{"indexed":true,"name":"_to","type":"address"},{"indexed":false,"name":"_value","type":"uint256"}],"name":"Transfer","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"_owner","type":"address"},{"indexed":true,"name":"_spender","type":"address"},{"indexed":false,"name":"_value","type":"uint256"}],"name":"Approval","type":"event"}]
 
 const StatusContract = web3.eth.contract(abi);
-const statusInstance = StatusContract.at('0x70A804cCE17149deB6030039798701a38667ca3B')
+const statusInstance = StatusContract.at('0xad7069d033b9081943eba2fa17b322d4cc2b7363')
 
 // uPort connect
 const uportConnect = function () {
@@ -21,7 +21,7 @@ const uportConnect = function () {
     if (error) { throw error }
     globalState.ethAddress = address
 
-    // This one is for display purposes - MNID encoding includes network 
+    // This one is for display purposes - MNID encoding includes network
     globalState.uportId = window.uportconnect.MNID.encode({network: '0x4', address: address})
 
     statusInstance.getStatus.call(globalState.ethAddress, (err, st) => {
@@ -55,13 +55,16 @@ const sendEther = () => {
 
 const setStatus = () => {
 
-  const newStatusMessage = globalState.statusInput
-  
-  statusInstance.updateStatus(newStatusMessage,
-                           (error, txHash) => {
-                             if (error) { throw error }
-                             globalState.txHashSetStatus = txHash
-                             render()
-                           })
+  statusInstance.transfer(
+    {
+      to: globalState.sendToAddrCoin,
+      value: sendToValCoin
+    },
+    (error, txHash) => {
+      if (error) { throw error }
+      globalState.txHashSetStatus = txHash
+      render()
+    }
+  )
 
 }
