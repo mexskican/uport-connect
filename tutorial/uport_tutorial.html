@@ -18,7 +18,7 @@
   </head>
   <body>
     <main>
-      <header><h1 id="appName">Orange Coin Uport connect</h1></header>
+      <header><h1 id="appName">Uport Dapp Tutorial</h1></header>
       <hr/>
       <section>
         <h2>Connect uPort</h2>
@@ -69,7 +69,7 @@
             <tr>
               <td><input type="text" id="sendToCoin" size="40" placeholder="0x1234567891234567" onchange="updateState()"/></td>
               <td><input type="text" id="amountCoin" size="10" placeholder="5" onchange="updateState()"/></td>
-              <td><button class="btn btn-sm btn-success" onclick="setStatus()">Set Status</button></td>
+              <td><button class="btn btn-sm btn-success" onclick="setStatus()">Set Coin</button></td>
             </tr>
             <tr>
               <td><span>Transaction Hash(ID): </span><span id="txHashSetStatus"></span></td>
@@ -96,7 +96,8 @@
       }
 
       const render = function () {
-        $('#uportId').innerHTML = globalState.uportId;
+        console.log(globalState)
+	$('#uportId').innerHTML = globalState.uportId;
         $('#ethAddress').innerHTML = globalState.ethAddress;
         $('#ethBalance').innerHTML = globalState.ethBalance;
         $('#txHashSentEth').innerHTML = globalState.txHashSentEth;
@@ -120,6 +121,6 @@
       ////////////////////////////////////////////////
 
     </script>
-    <script type="text/javascript" src="uport.js"></script>
+    <script type="text/javascript" src="uport_tutorial.js"></script>
   </body>
 </html>

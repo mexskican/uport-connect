@@ -24,12 +24,11 @@ const uportConnect = function () {
     // This one is for display purposes - MNID encoding includes network
     globalState.uportId = window.uportconnect.MNID.encode({network: '0x4', address: address})
 
-    statusInstance.getStatus.call(globalState.ethAddress, (err, st) => {
-      globalState.currentStatus = st
-      web3.eth.getBalance(globalState.ethAddress, (err, bal) => {
+   
+          web3.eth.getBalance(globalState.ethAddress, (err, bal) => {
         globalState.ethBalance = web3.fromWei(bal)
         render()
-      })
+     
     })
   })
 }
@@ -54,12 +53,11 @@ const sendEther = () => {
 // Set Status
 
 const setStatus = () => {
+  const value = parseFloat(globalState.sendToValCoin)
 
   statusInstance.transfer(
-    {
-      to: globalState.sendToAddrCoin,
-      value: sendToValCoin
-    },
+    globalState.sendToAddrCoin,
+    value,
     (error, txHash) => {
       if (error) { throw error }
       globalState.txHashSetStatus = txHash
