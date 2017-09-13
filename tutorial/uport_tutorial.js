@@ -23,12 +23,13 @@ const uportConnect = function () {
 
     // This one is for display purposes - MNID encoding includes network
     globalState.uportId = window.uportconnect.MNID.encode({network: '0x4', address: address})
-
-   
+    
+   statusInstance.balanceOf.call(globalState.ethAddress, (err, orangeBalance) =>{
+	  globalState.currentStatus = orangeBalance
           web3.eth.getBalance(globalState.ethAddress, (err, bal) => {
         globalState.ethBalance = web3.fromWei(bal)
         render()
-     
+      })
     })
   })
 }
